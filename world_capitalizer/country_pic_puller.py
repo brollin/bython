@@ -32,17 +32,20 @@ for country in (countries + alpha3):
     # Send HTTP GET request, receive soup
     soup = get_soup(url, header)
 
-    # Grab the first image
-    img = soup.find("div", {"class":"rg_meta"})
+    try:
+        # Grab the first image
+        img = soup.find("div", {"class":"rg_meta"})
 
-    # Save the link from the json information
-    link = json.loads(img.text)["ou"]
+        # Save the link from the json information
+        link = json.loads(img.text)["ou"]
 
-    country_links.append((country, link))
-    print (country, link)
+        country_links.append((country, link))
+        print (country, link)
 
-    # Save the image locally
-    urllib.urlretrieve(link, os.path.join("country_pics", country.replace(' ','_') + '.jpg'))
+        # Save the image locally
+        urllib.urlretrieve(link, os.path.join("country_pics", country.replace(' ','_') + '.jpg'))
+    except:
+        pass
 
 
 
