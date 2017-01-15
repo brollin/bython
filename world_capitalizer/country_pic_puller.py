@@ -43,7 +43,7 @@ for country in (countries + alpha3):
         print (country, link)
 
         # Save the image locally
-        urllib.urlretrieve(link, os.path.join("country_pics", country.replace(' ','_') + '.jpg'))
+        urllib.urlretrieve(link, os.path.join("country_pics", country.replace(' ','_') + '.png'))
     except:
         pass
 

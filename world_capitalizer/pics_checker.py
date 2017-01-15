@@ -1,8 +1,8 @@
 # pics_checker.py
 # The idea is that with country_pic_puller.py, you have a directory that is
-# full of .jpg pictures.  Some are the full country name style, such as:
-# "Bangladesh.jpg".  Others are the ISO Alpha-3 standard style, such as:
-# "ANT.jpg".  BEFORE this script is run, one must run country_pic_puller.py
+# full of .png pictures.  Some are the full country name style, such as:
+# "Bangladesh.png".  Others are the ISO Alpha-3 standard style, such as:
+# "ANT.png".  BEFORE this script is run, one must run country_pic_puller.py
 # and then manually peruse these pictures, deleting the ones that are not
 # the orthographic ones we wish to use in the app.  This must be done 
 # manually, unfortunately.  Then, after the desired pictures have been removed,
@@ -12,6 +12,7 @@
 import os
 import json
 import pprint
+import shutil
 
 def get_country_data(filename):
     return json.load(open(filename))
@@ -23,7 +24,7 @@ alpha3 = country_data.values()
 path = "country_pics"
 
 files = os.listdir(path)
-files = [f.replace('.jpg','').replace('_',' ') for f in files]
+files = [f.replace('.png','').replace('_',' ') for f in files]
 
 country_img_type = {}
 for country in countries:
@@ -34,19 +35,31 @@ for country in countries:
     if country in files:
         # file has full country in filename
         country_img_type[country]['full'] = True
-    elif country_data[country] in files:
+    if country_data[country] in files:
         # file has alpha3 in filename
         country_img_type[country]['alph'] = True
-
-for country in country_img_type:
+    
     full = country_img_type[country]['full']
     alph = country_img_type[country]['alph']
-    
+
     if full and alph:
-        print country, 'has full AND alph'
+        pass
+        print 'full and alph for', country
     elif full and not alph:
-        print country, 'has full'
+        pass
+        print 'full for         ', country
     elif alph and not full:
-        print country, 'has alph'
+        pass
+        print 'alph for         ', country
+    elif not alph and not full:
+        print 'no full or alph  ', country
+
+    dest_path = './country_pics_final/' + country.replace(' ','_') + '.png'
+
+    if full:
+        shutil.copy('./country_pics/'+country.replace(' ','_')+'.png', dest_path)
+    elif alph:
+        shutil.copy('./country_pics/'+country_data[country].replace(' ','_')+'.png', dest_path)
+    
         
 
