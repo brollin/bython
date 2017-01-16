@@ -1,16 +1,14 @@
-# Image package not usable on windows...
-
 import os, sys
-import Image
+from PIL import Image
 
-size = 128, 128
+size = (150, 150)
 
 for infile in sys.argv[1:]:
-    outfile = os.path.splitext(infile)[0] + ".thumbnail"
+    outfile = "processed/" + os.path.splitext(infile)[0].lower().replace('&','and') + ".png"
     if infile != outfile:
         try:
             im = Image.open(infile)
             im.thumbnail(size, Image.ANTIALIAS)
-            im.save(outfile, "JPEG")
+            im.save(outfile, "PNG")
         except IOError:
             print "cannot create thumbnail for '%s'" % infile
